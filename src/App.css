@@ -6,6 +6,7 @@ body {
   background: linear-gradient(90deg, #1b699e 0%, #36b9a9 100%);
   color: #fff;
   font-family: "IBM Plex Sans Arabic";
+  background: red;
 }
 #root {
   width: 100%;
