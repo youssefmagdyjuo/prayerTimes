@@ -72,10 +72,71 @@ img {
   text-align: center;
   text-shadow: 2px 1px 7px rgba(0, 255, 255, 0.269);
 }
-.select {
-  background: #fff;
+/* .select {
+  background: transparent;
+  outline: none;
+  border: 1px solid #999;
   width: 25rem;
+} */
+
+.select {
+  position: relative;
+  min-width: 200px;
 }
+.select svg {
+  position: absolute;
+  right: 12px;
+  top: calc(50% - 3px);
+  width: 10px;
+  height: 6px;
+  stroke-width: 2px;
+  stroke: #ffffff;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.select select {
+  width: 15rem !important;
+  height: 3rem; 
+  -webkit-appearance: none;
+  padding: 7px 40px 7px 12px;
+  width: 100%;
+  border: 1px solid #e8eaed;
+  border-radius: 5px;
+  background: transparent;
+  box-shadow: 0 1px 3px -2px #9098a9;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 150ms ease;
+  color: #fff;
+}
+.select select:required:invalid {
+  color: #fff;
+}
+.select select option {
+  color: #223254;
+}
+.select select option[value=""][disabled] {
+  display: none;
+}
+.select select:focus {
+  outline: none;
+  border: none;
+  box-shadow: 0 0px 10px 0 #ffffff52;
+}
+.select select:hover + svg {
+  stroke: #fff;
+}
+.sprites {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
 .selecters {
   display: flex;
   margin: 1rem 0;
