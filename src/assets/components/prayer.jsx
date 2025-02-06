@@ -1,24 +1,16 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 
 export default function Prayer({name,time,imge}) {
     return (
-        <Card className='card'>
-        <CardMedia
-            sx={{ height: 140 }}
-            image={imge}
-            title="green iguana"
-        />
-        <CardContent>
-            <h3 >
+        <div className='card'>
+            <div className="prayerImg">
+            <img src={imge} alt="Avatar" style={{width:'100%'}}/>
+            </div>
+            <h3 className="prayerName" >
             {name}
             </h3>
-            <Typography variant="h1" sx={{ color: 'text.secondary' }}>
+            <h1 className="prayerTime"> 
             {time}
-            </Typography>
-        </CardContent>
-        </Card>
+            </h1>
+        </div>
     );
 }
