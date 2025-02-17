@@ -1,9 +1,5 @@
 import Stack from '@mui/material/Stack';
 import Prayer from './prayer';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
@@ -11,6 +7,8 @@ import "moment/dist/locale/ar-ma"
 moment.locale("ar-ma")
 export default function MainContent() {
     // ______________ states _________________
+    // location stats
+const [location, setLocation] = useState({ lat: null, lon: null, address: "",city:'',country:'' });
     // avaliblcities state 
     const [avaliblcities, set_avaliblcities] = useState([
         { nameEn: 'Alexandria', nameAr: 'الأسكندرية' },
@@ -31,6 +29,7 @@ export default function MainContent() {
     // Timing State
     const [timings, setTimings] = useState({
         Fajr: "04:57",
+        Sunrise:"1:52:",
         Dhuhr: "11:34",
         Asr: "14:30",
         Maghrib: "16:50",
@@ -50,6 +49,7 @@ export default function MainContent() {
     // All pryaers 
     const allPryers = [
         { nameEn: 'Fajr', nameAr: 'الفجر' },
+        { nameEn: 'Sunrise', nameAr: 'الشروق' },
         { nameEn: 'Dhuhr', nameAr: "الظهر" },
         { nameEn: 'Asr', nameAr: "العصر" },
         { nameEn: 'Maghrib', nameAr: "المغرب" },
@@ -57,7 +57,7 @@ export default function MainContent() {
     ]
     const allthing = [
         {
-            countryEn: "EG",
+            countryEn: "eg",
             countryAr: "مصر",
             capetal: { nameEn: "Cairo", nameAr: "القاهرة" },
             cities: [
@@ -73,7 +73,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "TN",
+            countryEn: "tn",
             countryAr: "تونس",
             capetal: { nameEn: "Tunis", nameAr: "تونس" },
             cities: [
@@ -84,7 +84,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "MA",
+            countryEn: "ma",
             countryAr: "المغرب",
             capetal: { nameEn: "Rabat", nameAr: "الرباط" },
             cities: [
@@ -96,7 +96,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "DZ",
+            countryEn: "dz",
             countryAr: "الجزائر",
             capetal: { nameEn: "Algiers", nameAr: "الجزائر" },
             cities: [
@@ -107,7 +107,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "LY",
+            countryEn: "ly",
             countryAr: "ليبيا",
             capetal: { nameEn: "Tripoli", nameAr: "طرابلس" },
             cities: [
@@ -118,7 +118,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "SA",
+            countryEn: "sa",
             countryAr: "السعودية",
             capetal: { nameEn: "Riyadh", nameAr: "الرياض" },
             cities: [
@@ -131,7 +131,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "AE",
+            countryEn: "ae",
             countryAr: "الإمارات",
             capetal: { nameEn: "Abu Dhabi", nameAr: "أبو ظبي" },
             cities: [
@@ -143,7 +143,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "JO",
+            countryEn: "jo",
             countryAr: "الأردن",
             capetal: { nameEn: "Amman", nameAr: "عمان" },
             cities: [
@@ -154,7 +154,7 @@ export default function MainContent() {
             ]
         },
         {
-            countryEn: "PS",
+            countryEn: "ps",
             countryAr: "فلسطين",
             capetal: { nameEn: "Jerusalem", nameAr: "القدس" },
             cities: [
@@ -174,39 +174,96 @@ export default function MainContent() {
     ]
 
     // new way to my website via location_______________________________________________________________new *
-    useEffect(() => {
-        getLocation()
-    }, [])
-    const getLocation = async () => {
-        try {
-            const respons = await axios.get('https://ipapi.co/json')
-            const data = respons.data
-            // search location data in allthing array 
-            const userLocationobject = allthing.find((c) => { return c.countryEn == data.country_code })
-            // if location is't included in allthing array 
-            if (userLocationobject == undefined) {
-                setcountry({ ...country, countryEn: data.country_code, countryAr: data.country_name })
-                setCity({ nameEn: data.city, nameAr: data.city })
-            }
-            // if location is included in allthing array 
-            else {
-                setcountry({ ...country, countryEn: userLocationobject.countryEn, countryAr: userLocationobject.countryAr })
-                set_avaliblcities(userLocationobject.cities)
-                // if city is't included in cities array 
-                const city_curentOpject = avaliblcities.find((city) => { return city.nameEn == data.city })
-                if (city_curentOpject == undefined) {
-                    setCity({ nameEn: data.city, nameAr: data.city })
-                }
-                // if city is included in cities array
-                else {
-                    setCity({ nameEn: city_curentOpject.nameEn, nameAr: city_curentOpject.nameAr })
-                }
-            }
+    // get location via IP Addrees
 
-        } catch (error) {
-            alert(error)
+    // useEffect(() => {
+    //     getLocation()
+    // }, [])
+    // const getLocation = async () => {
+    //     try {
+    //         const respons = await axios.get('https://ipapi.co/json')
+    //         const data = respons.data
+    //         // search location data in allthing array 
+    //         const userLocationobject = allthing.find((c) => { return c.countryEn == data.country_code })
+    //         // if location is't included in allthing array 
+    //         if (userLocationobject == undefined) {
+    //             setcountry({ ...country, countryEn: data.country_code, countryAr: data.country_name })
+    //             setCity({ nameEn: data.city, nameAr: data.city })
+    //         }
+    //         // if location is included in allthing array 
+    //         else {
+    //             setcountry({ ...country, countryEn: userLocationobject.countryEn, countryAr: userLocationobject.countryAr })
+    //             set_avaliblcities(userLocationobject.cities)
+    //             // if city is't included in cities array 
+    //             const city_curentOpject = avaliblcities.find((city) => { return city.nameEn == data.city })
+    //             if (city_curentOpject == undefined) {
+    //                 setCity({ nameEn: data.city, nameAr: data.city })
+    //             }
+    //             // if city is included in cities array
+    //             else {
+    //                 setCity({ nameEn: city_curentOpject.nameEn, nameAr: city_curentOpject.nameAr })
+    //             }
+    //         }
+
+    //     } catch (error) {
+    //         alert(error)
+    //     }
+    // }
+
+// get location via lat and long 
+    const API_URL = `https://api.opencagedata.com/geocode/v1/json?`
+    const apiKey = "9a1b3d0f87a24eb486288bbceae2bb9d";
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setLocation((prev) => ({ ...prev, lat: latitude, lon: longitude }));
+                    fetchLocation(latitude, longitude);
+                },
+                (error) => console.error("Error getting location:", error)
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
         }
-    }
+    }, []);
+
+    const fetchLocation = async (lat, lon) => {
+        try {
+            const response = await axios.get(`${API_URL}q=${lat}+${lon}&key=${apiKey}`);
+            const formattedAddress = response.data.results[0]?.formatted || "Location not found";
+            const iso =response.data.results[0].components.country_code
+            const country =response.data.results[0].components.country
+            const cityName =response.data.results[0].components.city
+            setLocation((prev) => ({ ...prev, address: formattedAddress,country:iso,city:cityName }));
+
+        // search location data in allthing array 
+        const userLocationobject = allthing.find((c) => { return c.countryEn == iso })
+        // if location is't included in allthing array but info in english
+        if (userLocationobject == undefined) {
+            setcountry({ ...country, countryEn: iso, countryAr: country })
+            setCity({ nameEn: cityName, nameAr: cityName })
+        }
+        // if location is included in allthing array 
+        else {
+            setcountry({ ...country, countryEn: userLocationobject.countryEn, countryAr: userLocationobject.countryAr })
+            set_avaliblcities(userLocationobject.cities)
+            // if city is't included in cities array 
+            const city_curentOpject = avaliblcities.find((city) => { return city.nameEn == cityName })
+            if (city_curentOpject == undefined) {
+                setCity({ nameEn: cityName, nameAr: cityName })
+            }
+            // if city is included in cities array
+            else {
+                setCity({ nameEn: city_curentOpject.nameEn, nameAr: city_curentOpject.nameAr })
+            }
+        }
+        } catch (error) {
+            console.error("Error fetching location name:", error);
+        }
+    };
+
+
     // handel coutry function
     const handelcoutry = (e) => {
         const country_curentOpject = allthing.find((c) => {
@@ -255,17 +312,20 @@ export default function MainContent() {
         let nextPrayer = null;
         // cheack witch the next prayer is
         if (momentNow.isAfter(moment(timings.Fajr, "hh:mm")) &&
-            momentNow.isBefore(moment(timings.Dhuhr, "hh:mm"))) {
+            momentNow.isBefore(moment(timings.Sunrise, "hh:mm"))) {
             nextPrayer = 1
-        } else if (momentNow.isAfter(moment(timings.Dhuhr, "hh:mm")) &&
-            momentNow.isBefore(moment(timings.Asr, "hh:mm"))) {
+        } else if (momentNow.isAfter(moment(timings.Sunrise, "hh:mm")) &&
+            momentNow.isBefore(moment(timings.Dhuhr, "hh:mm"))) {
             nextPrayer = 2
-        } else if (momentNow.isAfter(moment(timings.Asr, "hh:mm")) &&
+        } else if (momentNow.isAfter(moment(timings.Dhuhr, "hh:mm")) &&
+        momentNow.isBefore(moment(timings.Asr, "hh:mm"))) {
+        nextPrayer = 3
+        }else if (momentNow.isAfter(moment(timings.Asr, "hh:mm")) &&
             momentNow.isBefore(moment(timings.Maghrib, "hh:mm"))) {
-            nextPrayer = 3
+            nextPrayer = 4
         } else if (momentNow.isAfter(moment(timings.Maghrib, "hh:mm")) &&
             momentNow.isBefore(moment(timings.Isha, "hh:mm"))) {
-            nextPrayer = 4
+            nextPrayer = 5
         } else {
             nextPrayer = 0
         }
@@ -292,7 +352,7 @@ export default function MainContent() {
             {/* header  */}
             <section className='header'>
                 <div className='header_rigth'>
-                    <h2>{toDay}</h2>
+                    <p>{toDay}</p>
                     <h1>{country.countryAr} | {city.nameAr}</h1>
                 </div>
                 <div className='header_left'>
@@ -303,6 +363,7 @@ export default function MainContent() {
             {/* cards  */}
             <Stack className='cards'>
                 <Prayer time={timings.Fajr} name="الفجر" imge="./imgs/fgr.jpg" />
+                <Prayer time={timings.Sunrise} name="الشروق" imge="./imgs/Sunrise.jpg" />
                 <Prayer time={timings.Dhuhr} name="الظهر" imge="./imgs/duhr.jpg" />
                 <Prayer time={timings.Asr} name="العصر" imge="./imgs/asr.jpg" />
                 <Prayer time={timings.Maghrib} name="المغرب" imge="./imgs/mgrb.jpg" />
@@ -312,9 +373,9 @@ export default function MainContent() {
             <div className='selecters'>
 
                 <div>
-                    <label className="select" htmlFor="slct">
-                        <select id="slct" required
-                        onChange={handelcoutry}>
+                    <label className="select" htmlFor="country">
+                        <select id="country" required
+                            onChange={handelcoutry}>
                             <option disabled selected value="">
                                 البلد
                             </option>
@@ -339,9 +400,9 @@ export default function MainContent() {
                 </div>
                 {/* city__________________________  */}
                 <div>
-                    <label className="select" htmlFor="slct">
-                        <select id="slct" required
-                        onChange={handlCity}>
+                    <label className="select" htmlFor="city">
+                        <select id="city" required
+                            onChange={handlCity}>
                             <option disabled selected value="">
                                 المدينة
                             </option>
