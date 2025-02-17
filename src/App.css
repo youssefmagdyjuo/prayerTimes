@@ -18,39 +18,39 @@ img {
 }
 
 .app {
-  width: 90% !important;
+  width: 94% !important;
   margin: 0 auto !important;
 }
-/* choose  */
-.css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
-  color: #fff !important;
-  border: #ffffff52 solid 0.01px !important;
-}
-.css-113d811-MuiFormLabel-root-MuiInputLabel-root {
-  color: #fff !important;
-}
-.css-1iw3t7y-MuiFormControl-root {
-  background: transparent !important;
-}
-/* arwo  */
-.css-lohd6h-MuiSvgIcon-root-MuiSelect-icon {
-  color: #fff !important;
-}
-/* city  */
-.css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root {
-  color: #fff !important;
-}
-/* choose  end*/
-
 .header {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  height: 12rem;
+}
+.header_rigth,.header_left{
+display: grid;
+grid-template-rows: 40% 60%;
+}
+.header h1,h2{
+margin: 0;
+align-self: center;
+}
+
+.date{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.date :nth-child(1)::after{
+  content: ' |';
+}
+.date :nth-child(3)::before{
+  content: '| ';
 }
 
 .cards {
   display: grid !important;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.4rem;
 }
 .card {
   box-shadow: 0 0px 10px 0 #ffffff52;
@@ -67,18 +67,11 @@ img {
 }
 .prayerTime {
   font-weight: 600;
-  font-size: 5rem;
+  font-size: 4.7rem;
   margin: 0;
   text-align: center;
   text-shadow: 2px 1px 7px rgba(0, 255, 255, 0.269);
 }
-/* .select {
-  background: transparent;
-  outline: none;
-  border: 1px solid #999;
-  width: 25rem;
-} */
-
 .select {
   position: relative;
   min-width: 200px;
@@ -154,6 +147,11 @@ img {
   margin: 0rem !important;
 }
 /* for tablet  */
+@media screen and (max-width: 1320px) {
+  .cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 @media screen and (max-width: 1024px) {
   .cards {
     grid-template-columns: repeat(3, 1fr);
@@ -168,12 +166,21 @@ img {
 }
 
 @media screen and (max-width: 600px) {
+  .date{
+    justify-content: space-between;
+  }
+  .date :nth-child(1)::after{
+    content: '';
+  }
+  .date :nth-child(3)::before{
+    content: '';
+  }
   .cards {
     justify-items: center !important;
   }
   .card {
-    height: 11.2rem;
-    width: 11.2rem;
+    height: 11rem;
+    width: 11rem;
     border-radius: 50%;
   }
   .prayerImg {
@@ -210,13 +217,13 @@ img {
 }
 @media screen and (max-width: 391px) {
   .card {
-    height: 10.5rem;
-    width: 10.5rem;
+    height: 10.4rem;
+    width: 10.4rem;
   }
 }
 @media screen and (max-width: 375px) {
   .card {
-    height: 10rem;
-    width: 10rem;
+    height: 9.9rem;
+    width: 9.9rem;
   }
 }
