@@ -40,8 +40,12 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
         nameAr: '',
         nameEn: "Alexandria"
     })
-    // time and day state 
+    // time state
+    const [time,setTime]= useState(null)
+    //  day state 
     const [toDay, setToDay] = useState('')
+    // day in hgry date 
+    const [hgry,setHgry]=useState({})
     // timer state 
     const [timer, setTimer] = useState("")
     // next prayer state 
@@ -279,8 +283,15 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
         const respons = await axios.get(
             `https://api.aladhan.com/v1/timingsByCity?country=${country.countryEn}&city=${city.nameEn}`
         );
+        const data = respons.data.data;
         // update stat after api respons 
-        setTimings(respons.data.data.timings)
+        setTimings(data.timings)
+        const dateInHgry = {
+            day:data.date.hijri.day,
+            month:data.date.hijri.month.ar,
+            year:data.date.hijri.year
+        }
+        setHgry(dateInHgry)
     }
     // api request by useEffect
     useEffect(() => {
@@ -301,7 +312,8 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
         }, 1000);
         // refresh the time and day state  
         const t = moment()
-        setToDay(t.format('Do MMM YYYY | hh:mm'))
+        setToDay(t.format('Do MMM YYYY'))
+        setTime(t.format('hh:mm'))
         return () => {
             clearInterval(x)
         }
@@ -352,7 +364,11 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
             {/* header  */}
             <section className='header'>
                 <div className='header_rigth'>
+                    <div className='date'>
                     <p>{toDay}</p>
+                    <p>{time}</p>
+                    <p>{`${hgry.day} ${hgry.month} ${hgry.year}`}</p>
+                    </div>
                     <h1>{country.countryAr} | {city.nameAr}</h1>
                 </div>
                 <div className='header_left'>
