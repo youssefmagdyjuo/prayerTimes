@@ -369,7 +369,12 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
                     <p>{time}</p>
                     <p>{`${hgry.day} ${hgry.month} ${hgry.year}`}</p>
                     </div>
-                    <h1>{country.countryAr} | {city.nameAr}</h1>
+                    {
+                        location.lat && location.lon ?(
+                            <h1>{country.countryAr} | {city.nameAr}</h1>
+                        ):(<h1>جارٍ تحديد موقعك...</h1>)
+                    }
+                    
                 </div>
                 <div className='header_left'>
                     <h2>متبقي حتى صلاة {allPryers[nexPrayerIndex].nameAr}</h2>
