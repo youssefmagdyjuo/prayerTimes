@@ -8,7 +8,7 @@ moment.locale("ar-ma")
 export default function MainContent() {
     // ______________ states _________________
     // location stats
-const [location, setLocation] = useState({ lat: null, lon: null, address: "",city:'',country:'' });
+    const [location, setLocation] = useState({ lat: null, lon: null, address: "", city: '', country: '' });
     // avaliblcities state 
     const [avaliblcities, set_avaliblcities] = useState([
         { nameEn: 'Alexandria', nameAr: 'الأسكندرية' },
@@ -29,7 +29,7 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
     // Timing State
     const [timings, setTimings] = useState({
         Fajr: "04:57",
-        Sunrise:"1:52:",
+        Sunrise: "1:52:",
         Dhuhr: "11:34",
         Asr: "14:30",
         Maghrib: "16:50",
@@ -41,11 +41,11 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
         nameEn: "Alexandria"
     })
     // time state
-    const [time,setTime]= useState(null)
+    const [time, setTime] = useState(null)
     //  day state 
     const [toDay, setToDay] = useState('')
     // day in hgry date 
-    const [hgry,setHgry]=useState({})
+    const [hgry, setHgry] = useState({})
     // timer state 
     const [timer, setTimer] = useState("")
     // next prayer state 
@@ -173,6 +173,32 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
                 { nameEn: "Qalqilya", nameAr: "قلقيلية" }
             ]
         },
+        {
+            countryEn: "kw",
+            countryAr: "الكويت",
+            capetal: { nameEn: "Kuwait City", nameAr: "مدينةالكويت" },
+            cities: [
+                { nameEn: "Kuwait City", nameAr: "مدينة الكويت" },
+                { nameEn: "Hawally", nameAr: "حولي" },
+                { nameEn: "Salmiya", nameAr: "السالمية" },
+                { nameEn: "Al Ahmadi", nameAr: "الأحمدي" },
+                { nameEn: "Al Jahra", nameAr: "الجهراء" },
+                { nameEn: "Al Farwaniyah", nameAr: "الفروانية" },
+                { nameEn: "Sabah Al Salem", nameAr: "صباح السالم" },
+                { nameEn: "Al Mangaf", nameAr: "المنقف" },
+                { nameEn: "Fahaheel", nameAr: "الفحيحيل" },
+                { nameEn: "Mubarak Al-Kabeer", nameAr: "مبارك الكبير" },
+                { nameEn: "Al Sulaibikhat", nameAr: "الصليبيخات" },
+                { nameEn: "Al Qurain", nameAr: "القرين" },
+                { nameEn: "Sabah Al Ahmad", nameAr: "صباح الأحمد" },
+                { nameEn: "Abdullah Al-Salem", nameAr: "عبد الله السالم" },
+                { nameEn: "Al Qadsiya", nameAr: "القادسية" },
+                { nameEn: "Abdullah Al-Mubarak", nameAr: "عبد الله المبارك" },
+                { nameEn: "Al Andalus", nameAr: "الأندلس" },
+                { nameEn: "Al Ardiya", nameAr: "العارضية" },
+                { nameEn: "Al Daiya", nameAr: "الدعية" }
+            ]
+        }
 
 
     ]
@@ -214,7 +240,7 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
     //     }
     // }
 
-// get location via lat and long 
+    // get location via lat and long 
     const API_URL = `https://api.opencagedata.com/geocode/v1/json?`
     const apiKey = "9a1b3d0f87a24eb486288bbceae2bb9d";
     useEffect(() => {
@@ -236,32 +262,32 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
         try {
             const response = await axios.get(`${API_URL}q=${lat}+${lon}&key=${apiKey}`);
             const formattedAddress = response.data.results[0]?.formatted || "Location not found";
-            const iso =response.data.results[0].components.country_code
-            const country =response.data.results[0].components.country
-            const cityName =response.data.results[0].components.city
-            setLocation((prev) => ({ ...prev, address: formattedAddress,country:iso,city:cityName }));
+            const iso = response.data.results[0].components.country_code
+            const country = response.data.results[0].components.country
+            const cityName = response.data.results[0].components.city
+            setLocation((prev) => ({ ...prev, address: formattedAddress, country: iso, city: cityName }));
 
-        // search location data in allthing array 
-        const userLocationobject = allthing.find((c) => { return c.countryEn == iso })
-        // if location is't included in allthing array but info in english
-        if (userLocationobject == undefined) {
-            setcountry({ ...country, countryEn: iso, countryAr: country })
-            setCity({ nameEn: cityName, nameAr: cityName })
-        }
-        // if location is included in allthing array 
-        else {
-            setcountry({ ...country, countryEn: userLocationobject.countryEn, countryAr: userLocationobject.countryAr })
-            set_avaliblcities(userLocationobject.cities)
-            // if city is't included in cities array 
-            const city_curentOpject = avaliblcities.find((city) => { return city.nameEn == cityName })
-            if (city_curentOpject == undefined) {
+            // search location data in allthing array 
+            const userLocationobject = allthing.find((c) => { return c.countryEn == iso })
+            // if location is't included in allthing array but info in english
+            if (userLocationobject == undefined) {
+                setcountry({ ...country, countryEn: iso, countryAr: country })
                 setCity({ nameEn: cityName, nameAr: cityName })
             }
-            // if city is included in cities array
+            // if location is included in allthing array 
             else {
-                setCity({ nameEn: city_curentOpject.nameEn, nameAr: city_curentOpject.nameAr })
+                setcountry({ ...country, countryEn: userLocationobject.countryEn, countryAr: userLocationobject.countryAr })
+                set_avaliblcities(userLocationobject.cities)
+                // if city is't included in cities array 
+                const city_curentOpject = avaliblcities.find((city) => { return city.nameEn == cityName })
+                if (city_curentOpject == undefined) {
+                    setCity({ nameEn: cityName, nameAr: cityName })
+                }
+                // if city is included in cities array
+                else {
+                    setCity({ nameEn: city_curentOpject.nameEn, nameAr: city_curentOpject.nameAr })
+                }
             }
-        }
         } catch (error) {
             console.error("Error fetching location name:", error);
         }
@@ -287,9 +313,9 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
         // update stat after api respons 
         setTimings(data.timings)
         const dateInHgry = {
-            day:data.date.hijri.day,
-            month:data.date.hijri.month.ar,
-            year:data.date.hijri.year
+            day: data.date.hijri.day,
+            month: data.date.hijri.month.ar,
+            year: data.date.hijri.year
         }
         setHgry(dateInHgry)
     }
@@ -330,9 +356,9 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
             momentNow.isBefore(moment(timings.Dhuhr, "hh:mm"))) {
             nextPrayer = 2
         } else if (momentNow.isAfter(moment(timings.Dhuhr, "hh:mm")) &&
-        momentNow.isBefore(moment(timings.Asr, "hh:mm"))) {
-        nextPrayer = 3
-        }else if (momentNow.isAfter(moment(timings.Asr, "hh:mm")) &&
+            momentNow.isBefore(moment(timings.Asr, "hh:mm"))) {
+            nextPrayer = 3
+        } else if (momentNow.isAfter(moment(timings.Asr, "hh:mm")) &&
             momentNow.isBefore(moment(timings.Maghrib, "hh:mm"))) {
             nextPrayer = 4
         } else if (momentNow.isAfter(moment(timings.Maghrib, "hh:mm")) &&
@@ -365,16 +391,16 @@ const [location, setLocation] = useState({ lat: null, lon: null, address: "",cit
             <section className='header'>
                 <div className='header_rigth'>
                     <div className='date'>
-                    <p>{toDay}</p>
-                    <p>{time}</p>
-                    <p>{`${hgry.day} ${hgry.month} ${hgry.year}`}</p>
+                        <p>{toDay}</p>
+                        <p>{time}</p>
+                        <p>{`${hgry.day} ${hgry.month} ${hgry.year}`}</p>
                     </div>
                     {
-                        location.lat && location.lon ?(
+                        location.lat && location.lon ? (
                             <h1>{country.countryAr} | {city.nameAr}</h1>
-                        ):(<h1>جارٍ تحديد موقعك...</h1>)
+                        ) : (<h1>جارٍ تحديد موقعك...</h1>)
                     }
-                    
+
                 </div>
                 <div className='header_left'>
                     <h2>متبقي حتى صلاة {allPryers[nexPrayerIndex].nameAr}</h2>
