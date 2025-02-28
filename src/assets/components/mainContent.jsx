@@ -7,11 +7,15 @@ import "moment/dist/locale/ar-ma"
 moment.locale("ar-ma")
 export default function MainContent() {
     // ______________ states _________________
+    // timer as GUI 
+    const [theDiff_between_2prayer,setTheDiff_between_2prayer] = useState(0)
+    const [theDiff_between_now_and_nextprayer,setTheDiff_between_now_and_nextprayer] = useState(0)
+    const [timer_GUI,setTimer_GUI] = useState(0)
     // location stats
     const [location, setLocation] = useState({ lat: null, lon: null, address: "", city: '', country: '' });
     // avaliblcities state 
     const [avaliblcities, set_avaliblcities] = useState([
-        { nameEn: 'Alexandria', nameAr: 'الأسكندرية' },
+        { nameEn: 'Alexandria', nameAr: 'الإسكندرية' },
         { nameEn: 'Cairo', nameAr: "القاهرة" },
         { nameEn: 'Ismailia', nameAr: "الاسماعيلية" },
         { nameEn: 'Gizeh', nameAr: "الجيزة" },
@@ -65,7 +69,7 @@ export default function MainContent() {
             countryAr: "مصر",
             capetal: { nameEn: "Cairo", nameAr: "القاهرة" },
             cities: [
-                { nameEn: "Alexandria", nameAr: "الأسكندرية" },
+                { nameEn: "Alexandria", nameAr: "الإسكندرية" },
                 { nameEn: "Cairo", nameAr: "القاهرة" },
                 { nameEn: "Ismailia", nameAr: "الاسماعيلية" },
                 { nameEn: "Gizeh", nameAr: "الجيزة" },
@@ -369,10 +373,11 @@ export default function MainContent() {
         }
         setNextPrayerIndex(nextPrayer)
         // timer part with next pryer 
+        // know what the next prayer is 
         const nextObject = allPryers[nextPrayer]
         const nextPrayerTime = timings[nextObject.nameEn]
         const nextPrayerTimeMoment = moment(nextPrayerTime, "hh:mm")
-        // الوقت الباقى 
+        // الوقت المتبقي بين الوقت الحالي والصلاة القادمة
         let remainingtTime = nextPrayerTimeMoment.diff(momentNow)
         if (remainingtTime < 0) {
             const midnigthDiff = moment("23:59:59", "hh:mm:ss").diff(momentNow)
@@ -380,13 +385,31 @@ export default function MainContent() {
             const totalDiff = midnigthDiff + faher_midnigthDiff
             remainingtTime = totalDiff
         }
+        // but the diff between now and next prayer as seconds in state to use it in GUI 
+        setTheDiff_between_now_and_nextprayer(remainingtTime)
         // صيغة مفهومة 
         const duration_remainingtTime = moment.duration(remainingtTime)
         setTimer(`${duration_remainingtTime.seconds()} : ${duration_remainingtTime.minutes()} : ${duration_remainingtTime.hours()}`)
+        // know what the last prayer is 
+        const lastObject = allPryers[nextPrayer-1]
+        const lastPrayerTime = timings[lastObject.nameEn]
+        const lastPrayerTimeMoment = moment(lastPrayerTime, "hh:mm")
+        // الوقت المتبقي بين الصلاة السابقة والصلاة القادمة
+        let diff_time = nextPrayerTimeMoment.diff(lastPrayerTimeMoment)
+        // but the diff between last prayer and next prayer as seconds in state to use it in GUI 
+        setTheDiff_between_2prayer(diff_time)
     }
+    useEffect(()=>{
+        setTimer_GUI(theDiff_between_now_and_nextprayer/theDiff_between_2prayer*100)
+    },[theDiff_between_now_and_nextprayer,theDiff_between_2prayer])  
     // ______________________________________________________Main Return_________________________________________________
     return (
         <div>
+            {/* <div style={{backgroundColor:'blue',height:'40px' }}>
+                <div style={{backgroundColor:'red',width:`${timer_GUI}%`,height:'100%' }}>
+                    
+                </div>
+            </div> */}
             {/* header  */}
             <section className='header'>
                 <div className='header_rigth'>
@@ -403,7 +426,7 @@ export default function MainContent() {
 
                 </div>
                 <div className='header_left'>
-                    <h2>متبقي حتى صلاة {allPryers[nexPrayerIndex].nameAr}</h2>
+                    <h2>متبقي على {allPryers[nexPrayerIndex].nameAr}</h2>
                     <h1>{timer}</h1>
                 </div>
             </section>
