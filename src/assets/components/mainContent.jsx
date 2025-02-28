@@ -7,6 +7,7 @@ import "moment/dist/locale/ar-ma"
 moment.locale("ar-ma")
 export default function MainContent() {
     // ______________ states _________________
+    const [selctor, setSelctor] = useState(false)
     // timer as GUI 
     const [theDiff_between_2prayer,setTheDiff_between_2prayer] = useState(0)
     const [theDiff_between_now_and_nextprayer,setTheDiff_between_now_and_nextprayer] = useState(0)
@@ -405,13 +406,9 @@ export default function MainContent() {
     // ______________________________________________________Main Return_________________________________________________
     return (
         <div>
-            {/* <div style={{backgroundColor:'blue',height:'40px' }}>
-                <div style={{backgroundColor:'red',width:`${timer_GUI}%`,height:'100%' }}>
-                    
-                </div>
-            </div> */}
             {/* header  */}
-            <section className='header'>
+            <section onClick={()=>{selctor?setSelctor(false):null}}
+            className='header'>
                 <div className='header_rigth'>
                     <div className='date'>
                         <p>{toDay}</p>
@@ -426,12 +423,24 @@ export default function MainContent() {
 
                 </div>
                 <div className='header_left'>
+                    <i
+                    id={selctor ? 'icon_active' : ''}
+                    onClick={()=>{
+                        setSelctor(!selctor)
+                    }}
+                    class="fa-solid fa-location-dot iconWorld"></i>
                     <h2>متبقي على {allPryers[nexPrayerIndex].nameAr}</h2>
                     <h1>{timer}</h1>
+            <div className='timer_GUI'>
+                <div style={{backgroundColor:'#fff',width:`${timer_GUI}%`,height:'100%',borderRadius:'10rem',transition:'0.5s' }}>
+                    
+                </div>
+            </div>
                 </div>
             </section>
             {/* cards  */}
-            <Stack className='cards'>
+            <Stack  onClick={()=>{selctor?setSelctor(false):null}}
+            className='cards'>
                 <Prayer time={timings.Fajr} name="الفجر" imge="./imgs/fgr.jpg" />
                 <Prayer time={timings.Sunrise} name="الشروق" imge="./imgs/Sunrise.jpg" />
                 <Prayer time={timings.Dhuhr} name="الظهر" imge="./imgs/duhr.jpg" />
@@ -440,8 +449,9 @@ export default function MainContent() {
                 <Prayer time={timings.Isha} name="العشاء" imge="./imgs/isha.jpg" />
             </Stack>
             {/* selecter  */}
-            <div className='selecters'>
-
+            <div 
+            id={selctor ? 'selctor_active' : 'selctor_hide'}
+            className='selecters'>
                 <div>
                     <label className="select" htmlFor="country">
                         <select id="country" required
